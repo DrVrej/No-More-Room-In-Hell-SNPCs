@@ -1,124 +1,108 @@
 /*--------------------------------------------------
 	=============== Autorun File ===============
-	*** Copyright (c) 2012-2021 by DrVrej, All rights reserved. ***
+	*** Copyright (c) 2012-2024 by DrVrej, All rights reserved. ***
 	No parts of this code or any of its contents may be reproduced, copied, modified or adapted,
 	without the prior written consent of the author, unless otherwise indicated for stand-alone materials.
 --------------------------------------------------*/
 ------------------ Addon Information ------------------
-local PublicAddonName = "No More Room In Hell SNPCs"
-local AddonName = "No More Room In Hell"
-local AddonType = "SNPC"
-local AutorunFile = "autorun/vj_nmrih_autorun.lua"
+local AddonName = "No More Room In Hell SNPCs"
+local AddonType = "NPC"
 -------------------------------------------------------
-local VJExists = file.Exists("lua/autorun/vj_base_autorun.lua","GAME")
+local VJExists = file.Exists("lua/autorun/vj_base_autorun.lua", "GAME")
 if VJExists == true then
 	include('autorun/vj_controls.lua')
 
-	local vCat = "No More Room In Hell"
+	local spawnCategory = "No More Room In Hell"
 
 	-- Running
-	VJ.AddNPC("Running Male Zombie","npc_vj_nmrih_runmalez",vCat)
-	VJ.AddNPC("Running Female Zombie","npc_vj_nmrih_runfemalez",vCat)
-	VJ.AddNPC("Running National Guard","npc_vj_nmrih_runsoldierz",vCat)
-	VJ.AddNPC("Random Running Zombie","sent_vj_nmrih_runrandz",vCat)
-	VJ.AddNPC("Random Running Zombie Spawner","sent_vj_nmrih_runrandzspawner",vCat)
+	VJ.AddNPC("Male Runner", "npc_vj_nmrih_run_male", spawnCategory)
+	VJ.AddNPC("Female Runner", "npc_vj_nmrih_run_female", spawnCategory)
+	VJ.AddNPC("National Guard Runnerd", "npc_vj_nmrih_run_guard", spawnCategory)
+	VJ.AddNPC("Random Runner", "sent_vj_nmrih_run_rand", spawnCategory)
+	VJ.AddNPC("Random Runner Spawner", "sent_vj_nmrih_run_randsp", spawnCategory)
 
 	-- Walking
-	VJ.AddNPC("Walking Male Zombie","npc_vj_nmrih_walkmalez",vCat)
-	VJ.AddNPC("Walking Female Zombie","npc_vj_nmrih_walkfemalez",vCat)
-	VJ.AddNPC("Walking National Guard","npc_vj_nmrih_walksoldierz",vCat)
-	VJ.AddNPC("Random Walking Zombie","sent_vj_nmrih_walkrandz",vCat)
-	VJ.AddNPC("Random Walking Zombie Spawner","sent_vj_nmrih_walkrandzspawner",vCat)
+	VJ.AddNPC("Male Shambler", "npc_vj_nmrih_sham_male", spawnCategory)
+	VJ.AddNPC("Female Shambler", "npc_vj_nmrih_sham_female", spawnCategory)
+	VJ.AddNPC("National Guard Shambler", "npc_vj_nmrih_sham_guard", spawnCategory)
+	VJ.AddNPC("Random Shambler", "sent_vj_nmrih_sham_rand", spawnCategory)
+	VJ.AddNPC("Random Shambler Spawner", "sent_vj_nmrih_sham_randsp", spawnCategory)
 
 	-- Misc
-	VJ.AddNPC("Child Zombie","npc_vj_nmrih_childz",vCat)
-	VJ.AddNPC("Random Zombie","sent_vj_nmrih_randz",vCat)
-	VJ.AddNPC("Random Zombie Spawner","sent_vj_nmrih_randzspawner",vCat)
-
-	-- Precache Models --
-	util.PrecacheModel("models/nmr_zombie/berny.mdl")
-	util.PrecacheModel("models/nmr_zombie/casual_02.mdl")
-	util.PrecacheModel("models/nmr_zombie/herby.mdl")
-	util.PrecacheModel("models/nmr_zombie/jessica.mdl")
-	util.PrecacheModel("models/nmr_zombie/jogger.mdl")
-	util.PrecacheModel("models/nmr_zombie/julie.mdl")
-	util.PrecacheModel("models/nmr_zombie/lisa.mdl")
-	util.PrecacheModel("models/nmr_zombie/maxx.mdl")
-	util.PrecacheModel("models/nmr_zombie/nmr_shared.mdl")
-	util.PrecacheModel("models/nmr_zombie/nmr_shared_female.mdl")
-	util.PrecacheModel("models/nmr_zombie/officezom.mdl")
-	util.PrecacheModel("models/nmr_zombie/runner.mdl")
-	util.PrecacheModel("models/nmr_zombie/tammy.mdl")
-	util.PrecacheModel("models/nmr_zombie/toby.mdl")
-	util.PrecacheModel("models/nmr_zombie/zombiekid_boy.mdl")
-	util.PrecacheModel("models/nmr_zombie/zombiekid_girl.mdl")
-
-	-- ConVars --
+	VJ.AddNPC("Child Zombie", "npc_vj_nmrih_child", spawnCategory)
+	VJ.AddNPC("Random Zombie", "sent_vj_nmrih_rand", spawnCategory)
+	VJ.AddNPC("Random Zombie Spawner", "sent_vj_nmrih_randsp", spawnCategory)
 	
-	-- Running
-	VJ.AddConVar("vj_nmrih_runmalez_h",150)
-	VJ.AddConVar("vj_nmrih_runmalez_d_single",20)
-	VJ.AddConVar("vj_nmrih_runmalez_d_dualfast",14)
-	VJ.AddConVar("vj_nmrih_runmalez_d_dualslow",18)
-
-	VJ.AddConVar("vj_nmrih_runfemalez_h",150)
-	VJ.AddConVar("vj_nmrih_runfemalez_d_single",20)
-	VJ.AddConVar("vj_nmrih_runfemalez_d_dualfast",14)
-	VJ.AddConVar("vj_nmrih_runfemalez_d_dualslow",18)
-
-	VJ.AddConVar("vj_nmrih_runsoldierz_h",300)
-	VJ.AddConVar("vj_nmrih_runsoldierz_d_single",35)
-	VJ.AddConVar("vj_nmrih_runsoldierz_d_dualfast",20)
-	VJ.AddConVar("vj_nmrih_runsoldierz_d_dualslow",24)
-
-	-- Walking
-	VJ.AddConVar("vj_nmrih_walkmalez_h",150)
-	VJ.AddConVar("vj_nmrih_walkmalez_d_single",20)
-	VJ.AddConVar("vj_nmrih_walkmalez_d_dualfast",14)
-	VJ.AddConVar("vj_nmrih_walkmalez_d_dualslow",18)
-
-	VJ.AddConVar("vj_nmrih_walkfemalez_h",150)
-	VJ.AddConVar("vj_nmrih_walkfemalez_d_single",20)
-	VJ.AddConVar("vj_nmrih_walkfemalez_d_dualfast",14)
-	VJ.AddConVar("vj_nmrih_walkfemalez_d_dualslow",18)
-
-	VJ.AddConVar("vj_nmrih_walksoldierz_h",300)
-	VJ.AddConVar("vj_nmrih_walksoldierz_d_single",35)
-	VJ.AddConVar("vj_nmrih_walksoldierz_d_dualfast",20)
-	VJ.AddConVar("vj_nmrih_walksoldierz_d_dualslow",24)
-
-	-- Child
-	VJ.AddConVar("vj_nmrih_childz_h",100)
-	VJ.AddConVar("vj_nmrih_childz_d",20)
+	-- Particles --
+	VJ.AddParticle("particles/vj_nmrih_blood.pcf", {
+		"vj_nmrih_blood_drain",
+		"vj_nmrih_blood_drain_big",
+		"vj_nmrih_blood_drain_short",
+		"vj_nmrih_blood_trails",
+	})
 
 -- !!!!!! DON'T TOUCH ANYTHING BELOW THIS !!!!!! -------------------------------------------------------------------------------------------------------------------------
-	AddCSLuaFile(AutorunFile)
-	VJ.AddAddonProperty(AddonName,AddonType)
+	AddCSLuaFile()
+	VJ.AddAddonProperty(AddonName, AddonType)
 else
-	if (CLIENT) then
-		chat.AddText(Color(0,200,200),PublicAddonName,
-		Color(0,255,0)," was unable to install, you are missing ",
-		Color(255,100,0),"VJ Base!")
+	if CLIENT then
+		chat.AddText(Color(0, 200, 200), AddonName, 
+		Color(0, 255, 0), " was unable to install, you are missing ", 
+		Color(255, 100, 0), "VJ Base!")
 	end
-	timer.Simple(1,function()
-		if not VJF then
-			if (CLIENT) then
-				VJF = vgui.Create("DFrame")
-				VJF:SetTitle("ERROR!")
-				VJF:SetSize(790,560)
-				VJF:SetPos((ScrW()-VJF:GetWide())/2,(ScrH()-VJF:GetTall())/2)
-				VJF:MakePopup()
-				VJF.Paint = function()
-					draw.RoundedBox(8,0,0,VJF:GetWide(),VJF:GetTall(),Color(200,0,0,150))
+
+	timer.Simple(1, function()
+		if not VJBASE_ERROR_MISSING then
+			VJBASE_ERROR_MISSING = true
+			if CLIENT then
+				// Get rid of old error messages from addons running on older code...
+				if VJF && type(VJF) == "Panel" then
+					VJF:Close()
 				end
+				VJF = true
 				
-				local VJURL = vgui.Create("DHTML",VJF)
-				VJURL:SetPos(VJF:GetWide()*0.005, VJF:GetTall()*0.03)
-				VJURL:Dock(FILL)
-				VJURL:SetAllowLua(true)
-				VJURL:OpenURL("https://sites.google.com/site/vrejgaming/vjbasemissing")
+				local frame = vgui.Create("DFrame")
+				frame:SetSize(600, 160)
+				frame:SetPos((ScrW() - frame:GetWide()) / 2, (ScrH() - frame:GetTall()) / 2)
+				frame:SetTitle("Error: VJ Base is missing!")
+				frame:SetBackgroundBlur(true)
+				frame:MakePopup()
+
+				local labelTitle = vgui.Create("DLabel", frame)
+				labelTitle:SetPos(250, 30)
+				labelTitle:SetText("VJ BASE IS MISSING!")
+				labelTitle:SetTextColor(Color(255, 128, 128))
+				labelTitle:SizeToContents()
+				
+				local label1 = vgui.Create("DLabel", frame)
+				label1:SetPos(170, 50)
+				label1:SetText("Garry's Mod was unable to find VJ Base in your files!")
+				label1:SizeToContents()
+				
+				local label2 = vgui.Create("DLabel", frame)
+				label2:SetPos(10, 70)
+				label2:SetText("You have an addon installed that requires VJ Base but VJ Base is missing. To install VJ Base, click on the link below. Once\n                                                   installed, make sure it is enabled and then restart your game.")
+				label2:SizeToContents()
+				
+				local link = vgui.Create("DLabelURL", frame)
+				link:SetSize(300, 20)
+				link:SetPos(195, 100)
+				link:SetText("VJ_Base_Download_Link_(Steam_Workshop)")
+				link:SetURL("https://steamcommunity.com/sharedfiles/filedetails/?id=131759821")
+				
+				local buttonClose = vgui.Create("DButton", frame)
+				buttonClose:SetText("CLOSE")
+				buttonClose:SetPos(260, 120)
+				buttonClose:SetSize(80, 35)
+				buttonClose.DoClick = function()
+					frame:Close()
+				end
 			elseif (SERVER) then
-				timer.Create("VJBASEMissing",5,0,function() print("VJ Base is Missing! Download it from the workshop!") end)
+				VJF = true
+				timer.Remove("VJBASEMissing")
+				timer.Create("VJBASE_ERROR_CONFLICT", 5, 0, function()
+					print("VJ Base is missing! Download it from the Steam Workshop! Link: https://steamcommunity.com/sharedfiles/filedetails/?id=131759821")
+				end)
 			end
 		end
 	end)
