@@ -81,6 +81,7 @@ ENT.Zombie_MoveAnim = ACT_WALK
 ENT.Zombie_IsCrawling = false
 ENT.Zombie_LegHP = 1 //30
 ENT.Zombie_GibNumber = -1 -- "-1" = Do NOT gib!
+ENT.Zombie_CanRunOnFire = false
 ---------------------------------------------------------------------------------------------------------------------------------------------
 function ENT:NMRIH_Init() end
 ---------------------------------------------------------------------------------------------------------------------------------------------
@@ -122,6 +123,7 @@ function ENT:CustomOnInitialize()
 		self.Zombie_MoveAnim = ACT_RUN
 	else -- Shambler
 		self.Zombie_MoveAnim = VJ.PICK(shamblerACTs)
+		self.Zombie_CanRunOnFire = math.random(1, 10) == 1
 	end
 	
 	self:NMRIH_Init()
@@ -166,6 +168,12 @@ function ENT:CustomOnTakeDamage_BeforeDamage(dmginfo, hitgroup)
 end
 ---------------------------------------------------------------------------------------------------------------------------------------------
 function ENT:CustomOnTakeDamage_AfterDamage(dmginfo, hitgroup)
+	-- Make shamblers have a chance to run if on fire
+	if self.Zombie_CanRunOnFire && self:IsOnFire() then
+		self.Zombie_MoveAnim = ACT_RUN
+	end
+	
+	-- Handle crawling code
 	if hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
 		self.Zombie_LegHP = self.Zombie_LegHP - dmginfo:GetDamage()
 		if self.Zombie_LegHP <= 0 then
