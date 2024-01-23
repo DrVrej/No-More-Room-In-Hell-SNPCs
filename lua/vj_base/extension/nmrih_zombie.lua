@@ -27,15 +27,22 @@ ENT.HasExtraMeleeAttackSounds = true -- Set to true to use the extra melee attac
 ENT.GibOnDeathDamagesTable = {"All"} -- Damages that it gibs from | "UseDefault" = Uses default damage types | "All" = Gib from any damage
 	-- ====== Flinching Code ====== --
 ENT.CanFlinch = 1 -- 0 = Don't flinch | 1 = Flinch at any damage | 2 = Flinch only from certain damages
-ENT.AnimTbl_Flinch = {ACT_BIG_FLINCH} -- If it uses normal based animation, use this
+ENT.FlinchChance = 1 -- Chance of it flinching from 1 to x | 1 will make it always flinch
+ENT.NextFlinchTime = false -- How much time until it can flinch again?
+ENT.AnimTbl_Flinch = {ACT_STEP_FORE} -- If it uses normal based animation, use this
+/* -- Gesture flinching looks very odd due to their animations, disabled for now
+ENT.HitGroupFlinching_Values = {
+	{HitGroup = {HITGROUP_HEAD}, Animation = {"vjges_flinch_head_1", "vjges_flinch_head_2", "vjges_flinch_head_3"}},
+	{HitGroup = {HITGROUP_CHEST}, Animation = {"vjges_flinch_chest_1", "vjges_flinch_chest_2", "vjges_flinch_chest_3"}},
+	{HitGroup = {HITGROUP_LEFTARM}, Animation = {"vjges_flinch_leftarm_1", "vjges_flinch_leftarm_2", "vjges_flinch_leftarm_3"}},
+	{HitGroup = {HITGROUP_RIGHTARM}, Animation = {"vjges_flinch_rightarm_1", "vjges_flinch_rightarm_2", "vjges_flinch_rightarm_3"}},
+}
+*/
 	-- ====== Sound File Paths ====== --
 -- Leave blank if you don't want any sounds to play
 ENT.SoundTbl_FootStep = {"npc/zombie/foot1.wav", "npc/zombie/foot2.wav", "npc/zombie/foot3.wav"}
-ENT.SoundTbl_MeleeAttack = {}
-ENT.SoundTbl_MeleeAttackExtra = {}
+//ENT.SoundTbl_MeleeAttackExtra = {"vj_nmrih/claw_strike1.wav", "vj_nmrih/claw_strike2.wav", "vj_nmrih/claw_strike3.wav"} -- Original game uses this but it sounds very bad
 ENT.SoundTbl_MeleeAttackMiss = {"npc/zombie/claw_miss1.wav", "npc/zombie/claw_miss2.wav"}
-ENT.SoundTbl_MeleeAttackSlowPlayer = {"vj_player/heartbeat.wav"}
-ENT.SoundTbl_Impact = {}
 
 local sdCrawling = {"vj_nmrih/zombie_scuff1.wav", "vj_nmrih/zombie_scuff2.wav", "vj_nmrih/zombie_scuff3.wav", "vj_nmrih/zombie_scuff4.wav", "vj_nmrih/zombie_scuff5.wav", "vj_nmrih/zombie_scuff6.wav", "vj_nmrih/zombie_scuff7.wav", "vj_nmrih/zombie_scuff8.wav", "vj_nmrih/zombie_scuff9.wav", "vj_nmrih/zombie_scuff10.wav", "vj_nmrih/zombie_scuff11.wav", "vj_nmrih/zombie_scuff12.wav"}
 local sdHeadshot = {"vj_nmrih/zombie_head_explode_01.wav", "vj_nmrih/zombie_head_explode_02.wav", "vj_nmrih/zombie_head_explode_03.wav", "vj_nmrih/zombie_head_explode_04.wav", "vj_nmrih/zombie_head_explode_05.wav", "vj_nmrih/zombie_head_explode_06.wav"}
@@ -79,7 +86,7 @@ ENT.Zombie_Type = 0 -- 0 = Shambler | 1 = Runner | 2 = Unique
 ENT.Zombie_Gender = 0 -- 0 = Male | 1 = Female | 2 = Kid
 ENT.Zombie_MoveAnim = ACT_WALK
 ENT.Zombie_IsCrawling = false
-ENT.Zombie_LegHP = 1 //30
+ENT.Zombie_LegHP = 30
 ENT.Zombie_GibNumber = -1 -- "-1" = Do NOT gib!
 ENT.Zombie_CanRunOnFire = false
 ---------------------------------------------------------------------------------------------------------------------------------------------
@@ -189,8 +196,42 @@ function ENT:CustomOnTakeDamage_AfterDamage(dmginfo, hitgroup)
 	end
 end
 ---------------------------------------------------------------------------------------------------------------------------------------------
+function ENT:CustomOnFlinch_BeforeFlinch(dmginfo, hitgroup)
+	-- Shoving system
+	local dmgType = dmginfo:GetDamageType()
+	if dmgType == DMG_CLUB or dmgType == DMG_SLASH  or dmgType == DMG_GENERIC then
+		local attacker = dmginfo:GetAttacker()
+		if !IsValid(attacker) then
+			attacker = dmginfo:GetInflictor()
+		end
+		if IsValid(attacker) && attacker:IsPlayer() && (dmginfo:GetDamageForce():Length() > 800 && dmginfo:GetDamage() > 10) then
+			self.AnimTbl_Flinch = ACT_STEP_FORE
+			if self.Zombie_Gender != 2 then -- Child zombies only have forward animation
+				local playerAim = attacker:GetAimVector()
+				local dotForward = playerAim:Dot(self:GetForward())
+				local dotRight = playerAim:Dot(self:GetRight())
+				if dotForward > 0.5 then
+					self.AnimTbl_Flinch = ACT_STEP_BACK
+				elseif dotForward < -0.5 then
+					self.AnimTbl_Flinch = ACT_STEP_FORE
+				elseif dotRight > 0.5 then
+					self.AnimTbl_Flinch = ACT_STEP_LEFT
+				elseif dotRight < -0.5 then
+					self.AnimTbl_Flinch = ACT_STEP_RIGHT
+				end
+			end
+			return true
+		end
+		return false
+	end
+	
+	-- Non-melee attacks
+	self.AnimTbl_Flinch = ACT_STEP_FORE
+	return math.random(1, 16) == 1
+end
+---------------------------------------------------------------------------------------------------------------------------------------------
 function ENT:SetUpGibesOnDeath(dmginfo, hitgroup)
-	if self.Zombie_GibNumber != -1 && hitgroup == HITGROUP_HEAD && dmginfo:GetDamageForce():Length() > 800 then
+	if self.Zombie_GibNumber != -1 && hitgroup == HITGROUP_HEAD && (dmginfo:GetDamageForce():Length() > 800 or dmginfo:GetDamage() > 75) then
 		local attachData = self:GetAttachment(self:LookupAttachment("headshot_squirt"))
 		
 		if self:GetModel() == "models/vj_nmrih/national_guard.mdl" then self:SetBodygroup(1, 1) end -- No helmet for national guard
