@@ -234,15 +234,18 @@ function ENT:SetUpGibesOnDeath(dmginfo, hitgroup)
 	if self.Zombie_GibNumber != -1 && hitgroup == HITGROUP_HEAD && (dmginfo:GetDamageForce():Length() > 800 or dmginfo:GetDamage() > 75) then
 		local attachData = self:GetAttachment(self:LookupAttachment("headshot_squirt"))
 		
+		self.HasDeathSounds = false -- No death sounds when head is blown off!
 		if self:GetModel() == "models/vj_nmrih/national_guard.mdl" then self:SetBodygroup(1, 1) end -- No helmet for national guard
 		self:SetBodygroup(self.Zombie_GibNumber.a, self.Zombie_GibNumber.b)
 		
+		-- Main drainage particles are in "CustomOnDeath_AfterCorpseSpawned"
 		if self.HasGibDeathParticles == true then
 			for _ = 1, 3 do
 				ParticleEffect("blood_impact_red_01", attachData.Pos, attachData.Ang)
 			end
 		end
 		
+		-- Create the gibs
 		self:CreateGibEntity("obj_vj_gib", "models/gibs/humans/sgib_01.mdl", {Pos=attachData.Pos + self:GetUp() * 5})
 		if self.Zombie_Gender != 2 then -- Kids create less gibs
 			self:CreateGibEntity("obj_vj_gib", "models/gibs/humans/sgib_02.mdl", {Pos=attachData.Pos + self:GetUp() * 5 + self:GetRight() * 5})
