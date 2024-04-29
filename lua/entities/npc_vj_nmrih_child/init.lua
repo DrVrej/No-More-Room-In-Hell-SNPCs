@@ -30,11 +30,11 @@ end
 ---------------------------------------------------------------------------------------------------------------------------------------------
 function ENT:TranslateActivity(act)
 	if act == ACT_WALK or act == ACT_RUN then
-		return ACT_WALK -- Child zombie has only ACT_WALK
+		return ACT_WALK -- Child zombies only have ACT_WALK
 	end
 	return self.BaseClass.TranslateActivity(self, act)
 end
 ---------------------------------------------------------------------------------------------------------------------------------------------
 function ENT:CustomOnTakeDamage_AfterDamage(dmginfo, hitgroup)
-	return -- Child zombie can NOT crawl
+	return -- Child zombies can NOT crawl
 end

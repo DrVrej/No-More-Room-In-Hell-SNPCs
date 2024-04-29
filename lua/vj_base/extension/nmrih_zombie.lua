@@ -8,7 +8,7 @@ ENT.VJ_NPC_Class = {"CLASS_ZOMBIE"} -- NPCs with the same class with be allied t
 ENT.BloodColor = "Red" -- The blood type, this will determine what it should use (decal, particle, etc.)
 
 ENT.HasMeleeAttack = true -- Should the SNPC have a melee attack?
-ENT.AnimTbl_MeleeAttack = {ACT_MELEE_ATTACK1} -- Melee Attack Animations
+ENT.AnimTbl_MeleeAttack = ACT_MELEE_ATTACK1 -- Melee Attack Animations
 ENT.MeleeAttackDistance = 30 -- How close does it have to be until it attacks?
 ENT.MeleeAttackDamageDistance = 75 -- How far does the damage go?
 ENT.TimeUntilMeleeAttackDamage = false -- This counted in seconds | This calculates the time until it hits something
@@ -29,7 +29,7 @@ ENT.GibOnDeathDamagesTable = {"All"} -- Damages that it gibs from | "UseDefault"
 ENT.CanFlinch = 1 -- 0 = Don't flinch | 1 = Flinch at any damage | 2 = Flinch only from certain damages
 ENT.FlinchChance = 1 -- Chance of it flinching from 1 to x | 1 will make it always flinch
 ENT.NextFlinchTime = false -- How much time until it can flinch again?
-ENT.AnimTbl_Flinch = {ACT_STEP_FORE} -- If it uses normal based animation, use this
+ENT.AnimTbl_Flinch = ACT_STEP_FORE -- If it uses normal based animation, use this
 /* -- Gesture flinching looks very odd due to their animations, disabled for now
 ENT.HitGroupFlinching_Values = {
 	{HitGroup = {HITGROUP_HEAD}, Animation = {"vjges_flinch_head_1", "vjges_flinch_head_2", "vjges_flinch_head_3"}},
