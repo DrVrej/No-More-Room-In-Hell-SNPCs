@@ -9,8 +9,8 @@ ENT.BloodColor = "Red" -- The blood type, this will determine what it should use
 
 ENT.HasMeleeAttack = true -- Should the SNPC have a melee attack?
 ENT.AnimTbl_MeleeAttack = ACT_MELEE_ATTACK1 -- Melee Attack Animations
-ENT.MeleeAttackDistance = 30 -- How close does it have to be until it attacks?
-ENT.MeleeAttackDamageDistance = 75 -- How far does the damage go?
+ENT.MeleeAttackDistance = 30 -- How close an enemy has to be to trigger a melee attack | false = Let the base auto calculate on initialize based on the NPC's collision bounds
+ENT.MeleeAttackDamageDistance = 75 -- How far does the damage go | false = Let the base auto calculate on initialize based on the NPC's collision bounds
 ENT.TimeUntilMeleeAttackDamage = false -- This counted in seconds | This calculates the time until it hits something
 ENT.SlowPlayerOnMeleeAttack = true -- If true, then the player will slow down
 ENT.SlowPlayerOnMeleeAttack_WalkSpeed = 100 -- Walking Speed when Slow Player is on

@@ -8,8 +8,8 @@ include("shared.lua")
 -----------------------------------------------*/
 ENT.StartHealth = 60
 
-ENT.MeleeAttackDistance = 25 -- How close does it have to be until it attacks?
-ENT.MeleeAttackDamageDistance = 60 -- How far does the damage go?
+ENT.MeleeAttackDistance = 25 -- How close an enemy has to be to trigger a melee attack | false = Let the base auto calculate on initialize based on the NPC's collision bounds
+ENT.MeleeAttackDamageDistance = 60 -- How far does the damage go | false = Let the base auto calculate on initialize based on the NPC's collision bounds
 
 ENT.Zombie_Type = 2
 ENT.Zombie_Gender = 2
