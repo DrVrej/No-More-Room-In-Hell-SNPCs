@@ -38,8 +38,7 @@ ENT.HitGroupFlinching_Values = {
 	{HitGroup = {HITGROUP_RIGHTARM}, Animation = {"vjges_flinch_rightarm_1", "vjges_flinch_rightarm_2", "vjges_flinch_rightarm_3"}},
 }
 */
-	-- ====== Sound File Paths ====== --
--- Leave blank if you don't want any sounds to play
+	-- ====== Sound Paths ====== --
 ENT.SoundTbl_FootStep = {"npc/zombie/foot1.wav", "npc/zombie/foot2.wav", "npc/zombie/foot3.wav"}
 //ENT.SoundTbl_MeleeAttackExtra = {"vj_nmrih/claw_strike1.wav", "vj_nmrih/claw_strike2.wav", "vj_nmrih/claw_strike3.wav"} -- Original game uses this but it sounds very bad
 ENT.SoundTbl_MeleeAttackMiss = {"npc/zombie/claw_miss1.wav", "npc/zombie/claw_miss2.wav"}
