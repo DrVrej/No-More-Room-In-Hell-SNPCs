@@ -1,4 +1,4 @@
-include("vj_base/extension/nmrih_zombie.lua")
+include("vj_base/extensions/nmrih_zombie.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
 /*-----------------------------------------------
