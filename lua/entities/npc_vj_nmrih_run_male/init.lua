@@ -11,7 +11,7 @@ ENT.StartHealth = 100
 ENT.Zombie_Type = 1
 ENT.Zombie_Gender = 0
 ---------------------------------------------------------------------------------------------------------------------------------------------
-function ENT:CustomOnPreInitialize()
+function ENT:PreInit()
 	local randModel = math.random(1, 24)
 	if randModel == 1 then
 		self.Model = "models/vj_nmrih/Runner.mdl"

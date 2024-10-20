@@ -8,7 +8,7 @@ ENT.VJ_NPC_Class = {"CLASS_ZOMBIE"} -- NPCs with the same class with be allied t
 ENT.BloodColor = "Red" -- The blood type, this will determine what it should use (decal, particle, etc.)
 
 ENT.HasMeleeAttack = true -- Can this NPC melee attack?
-ENT.AnimTbl_MeleeAttack = ACT_MELEE_ATTACK1 -- Melee Attack Animations
+ENT.AnimTbl_MeleeAttack = ACT_MELEE_ATTACK1
 ENT.MeleeAttackDistance = 30 -- How close an enemy has to be to trigger a melee attack | false = Let the base auto calculate on initialize based on the NPC's collision bounds
 ENT.MeleeAttackDamageDistance = 75 -- How far does the damage go | false = Let the base auto calculate on initialize based on the NPC's collision bounds
 ENT.TimeUntilMeleeAttackDamage = false -- This counted in seconds | This calculates the time until it hits something
@@ -29,7 +29,7 @@ ENT.GibOnDeathDamagesTable = {"All"} -- Damages that it gibs from | "UseDefault"
 ENT.CanFlinch = 1 -- 0 = Don't flinch | 1 = Flinch at any damage | 2 = Flinch only from certain damages
 ENT.FlinchChance = 1 -- Chance of it flinching from 1 to x | 1 will make it always flinch
 ENT.NextFlinchTime = false -- How much time until it can flinch again?
-ENT.AnimTbl_Flinch = ACT_STEP_FORE -- If it uses normal based animation, use this
+ENT.AnimTbl_Flinch = ACT_STEP_FORE -- The regular flinch animations to play
 /* -- Gesture flinching looks very odd due to their animations, disabled for now
 ENT.HitGroupFlinching_Values = {
 	{HitGroup = {HITGROUP_HEAD}, Animation = {"vjges_flinch_head_1", "vjges_flinch_head_2", "vjges_flinch_head_3"}},
@@ -91,7 +91,7 @@ ENT.Zombie_CanRunOnFire = false
 ---------------------------------------------------------------------------------------------------------------------------------------------
 function ENT:NMRIH_Init() end
 ---------------------------------------------------------------------------------------------------------------------------------------------
-function ENT:CustomOnInitialize()
+function ENT:Init()
 	-- Setup sounds
 	if self.Zombie_Gender == 1 then -- Female
 		self.SoundTbl_Idle = sdFemale_Idle
@@ -148,8 +148,8 @@ function ENT:TranslateActivity(act)
 	return self.BaseClass.TranslateActivity(self, act)
 end
 ---------------------------------------------------------------------------------------------------------------------------------------------
-function ENT:CustomOnAcceptInput(key, activator, caller, data)
-	//print("OnAcceptInput", key, activator, caller, data)
+function ENT:OnInput(key, activator, caller, data)
+	//print("OnInput: ", key, activator, caller, data)
 	if key == "melee" then
 		self.MeleeAttackDamage = 15
 		self:MeleeAttackCode()
@@ -166,67 +166,67 @@ function ENT:CustomOnAcceptInput(key, activator, caller, data)
 	end
 end
 ---------------------------------------------------------------------------------------------------------------------------------------------
-function ENT:CustomOnTakeDamage_BeforeDamage(dmginfo, hitgroup)
+function ENT:OnDamaged(dmginfo, hitgroup, status)
 	-- Headshots do 2.5x more damage!
-	if hitgroup == HITGROUP_HEAD then
+	if status == "PreDamage" && hitgroup == HITGROUP_HEAD then
 		dmginfo:ScaleDamage(2.5)
-	end
-end
----------------------------------------------------------------------------------------------------------------------------------------------
-function ENT:CustomOnTakeDamage_AfterDamage(dmginfo, hitgroup)
-	-- Make shamblers have a chance to run if on fire
-	if self.Zombie_CanRunOnFire && self:IsOnFire() then
-		self.Zombie_MoveAnim = ACT_RUN
-	end
-	
-	-- Handle crawling code
-	if hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
-		self.Zombie_LegHP = self.Zombie_LegHP - dmginfo:GetDamage()
-		if self.Zombie_LegHP <= 0 then
-			self.AnimTbl_MeleeAttack = ACT_MELEE_ATTACK_SWING
-			self.Zombie_IsCrawling = true
-			self.CanFlinch = 0
-			self:SetCollisionBounds(Vector(25, 25, 20), -Vector(25, 25, 0))
-			self:SetSurroundingBounds(Vector(60, 60, 30), -Vector(60, 60, 0))
-			local newEyeOffset = self:GetUp() * 15
-			self:SetViewOffset(newEyeOffset)
-			self:SetSaveValue("m_vDefaultEyeOffset", newEyeOffset)
+	elseif status == "PostDamage" && self.Zombie_Gender != 2 then
+		-- Make shamblers have a chance to run if on fire
+		if self.Zombie_CanRunOnFire && self:IsOnFire() then
+			self.Zombie_MoveAnim = ACT_RUN
 		end
-	end
-end
----------------------------------------------------------------------------------------------------------------------------------------------
-function ENT:CustomOnFlinch_BeforeFlinch(dmginfo, hitgroup)
-	-- Shoving system
-	local dmgType = dmginfo:GetDamageType()
-	if dmgType == DMG_CLUB or dmgType == DMG_SLASH  or dmgType == DMG_GENERIC then
-		local attacker = dmginfo:GetAttacker()
-		if !IsValid(attacker) then
-			attacker = dmginfo:GetInflictor()
-		end
-		if IsValid(attacker) && attacker:IsPlayer() && (dmginfo:GetDamageForce():Length() > 800 && dmginfo:GetDamage() > 10) then
-			self.AnimTbl_Flinch = ACT_STEP_FORE
-			if self.Zombie_Gender != 2 then -- Child zombies only have forward animation
-				local playerAim = attacker:GetAimVector()
-				local dotForward = playerAim:Dot(self:GetForward())
-				local dotRight = playerAim:Dot(self:GetRight())
-				if dotForward > 0.5 then
-					self.AnimTbl_Flinch = ACT_STEP_BACK
-				elseif dotForward < -0.5 then
-					self.AnimTbl_Flinch = ACT_STEP_FORE
-				elseif dotRight > 0.5 then
-					self.AnimTbl_Flinch = ACT_STEP_LEFT
-				elseif dotRight < -0.5 then
-					self.AnimTbl_Flinch = ACT_STEP_RIGHT
-				end
+		
+		-- Handle crawling code
+		if hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
+			self.Zombie_LegHP = self.Zombie_LegHP - dmginfo:GetDamage()
+			if self.Zombie_LegHP <= 0 then
+				self.AnimTbl_MeleeAttack = ACT_MELEE_ATTACK_SWING
+				self.Zombie_IsCrawling = true
+				self.CanFlinch = 0
+				self:SetCollisionBounds(Vector(25, 25, 20), -Vector(25, 25, 0))
+				self:SetSurroundingBounds(Vector(60, 60, 30), -Vector(60, 60, 0))
+				local newEyeOffset = self:GetUp() * 15
+				self:SetViewOffset(newEyeOffset)
+				self:SetSaveValue("m_vDefaultEyeOffset", newEyeOffset)
 			end
-			return true
 		end
-		return false
 	end
-	
-	-- Non-melee attacks
-	self.AnimTbl_Flinch = ACT_STEP_FORE
-	return math.random(1, 16) == 1
+end
+---------------------------------------------------------------------------------------------------------------------------------------------
+function ENT:OnFlinch(dmginfo, hitgroup, status)
+	if status == "PriorExecution" then
+		-- Shoving system
+		local dmgType = dmginfo:GetDamageType()
+		if dmgType == DMG_CLUB or dmgType == DMG_SLASH  or dmgType == DMG_GENERIC then
+			local attacker = dmginfo:GetAttacker()
+			if !IsValid(attacker) then
+				attacker = dmginfo:GetInflictor()
+			end
+			if IsValid(attacker) && attacker:IsPlayer() && (dmginfo:GetDamageForce():Length() > 800 && dmginfo:GetDamage() > 10) then
+				self.AnimTbl_Flinch = ACT_STEP_FORE
+				if self.Zombie_Gender != 2 then -- Child zombies only have forward animation
+					local playerAim = attacker:GetAimVector()
+					local dotForward = playerAim:Dot(self:GetForward())
+					local dotRight = playerAim:Dot(self:GetRight())
+					if dotForward > 0.5 then
+						self.AnimTbl_Flinch = ACT_STEP_BACK
+					elseif dotForward < -0.5 then
+						self.AnimTbl_Flinch = ACT_STEP_FORE
+					elseif dotRight > 0.5 then
+						self.AnimTbl_Flinch = ACT_STEP_LEFT
+					elseif dotRight < -0.5 then
+						self.AnimTbl_Flinch = ACT_STEP_RIGHT
+					end
+				end
+				return true
+			end
+			return false
+		end
+		
+		-- Non-melee attacks
+		self.AnimTbl_Flinch = ACT_STEP_FORE
+		return math.random(1, 16) == 1
+	end
 end
 ---------------------------------------------------------------------------------------------------------------------------------------------
 function ENT:SetUpGibesOnDeath(dmginfo, hitgroup)
@@ -237,8 +237,8 @@ function ENT:SetUpGibesOnDeath(dmginfo, hitgroup)
 		if self:GetModel() == "models/vj_nmrih/national_guard.mdl" then self:SetBodygroup(1, 1) end -- No helmet for national guard
 		self:SetBodygroup(self.Zombie_GibNumber.a, self.Zombie_GibNumber.b)
 		
-		-- Main drainage particles are in "CustomOnDeath_AfterCorpseSpawned"
-		if self.HasGibDeathParticles == true then
+		-- Main drainage particles are in "OnCreateDeathCorpse"
+		if self.HasGibOnDeathEffects == true then
 			for _ = 1, 3 do
 				ParticleEffect("blood_impact_red_01", attachData.Pos, attachData.Ang)
 			end
@@ -259,8 +259,8 @@ function ENT:CustomGibOnDeathSounds(dmginfo, hitgroup)
 	return false
 end
 ---------------------------------------------------------------------------------------------------------------------------------------------
-function ENT:CustomOnDeath_AfterCorpseSpawned(dmginfo, hitgroup, corpseEnt)
-	if self.HasBeenGibbedOnDeath && self.HasGibDeathParticles == true then
+function ENT:OnCreateDeathCorpse(dmginfo, hitgroup, corpseEnt)
+	if self.GibbedOnDeath && self.HasGibOnDeathEffects == true then
 		local attach = corpseEnt:LookupAttachment("headshot_squirt")
 		VJ.EmitSound(corpseEnt, sdHeadshotDrain, 60, math.random(80, 100))
 		ParticleEffectAttach("vj_nmrih_blood_drain", PATTACH_POINT_FOLLOW, corpseEnt, attach)

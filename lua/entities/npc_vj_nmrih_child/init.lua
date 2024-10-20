@@ -14,7 +14,7 @@ ENT.MeleeAttackDamageDistance = 60 -- How far does the damage go | false = Let t
 ENT.Zombie_Type = 2
 ENT.Zombie_Gender = 2
 ---------------------------------------------------------------------------------------------------------------------------------------------
-function ENT:CustomOnPreInitialize()
+function ENT:PreInit()
 	if math.random(1, 2) == 1 then
 		self.Model = "models/VJ_NMRIH/zombiekid_boy.mdl"
 		self.Zombie_GibNumber = VJ.SET(0, math.random(1, 2))
@@ -33,8 +33,4 @@ function ENT:TranslateActivity(act)
 		return ACT_WALK -- Child zombies only have ACT_WALK
 	end
 	return self.BaseClass.TranslateActivity(self, act)
-end
----------------------------------------------------------------------------------------------------------------------------------------------
-function ENT:CustomOnTakeDamage_AfterDamage(dmginfo, hitgroup)
-	return -- Child zombies can NOT crawl
 end
