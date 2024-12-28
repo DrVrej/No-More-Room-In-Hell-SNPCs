@@ -218,14 +218,14 @@ function ENT:OnFlinch(dmginfo, hitgroup, status)
 						self.AnimTbl_Flinch = ACT_STEP_RIGHT
 					end
 				end
-				return true
+				return
 			end
-			return false
+			return true
 		end
 		
 		-- Non-melee attacks
 		self.AnimTbl_Flinch = ACT_STEP_FORE
-		return math.random(1, 16) == 1
+		return math.random(1, 16) != 1
 	end
 end
 ---------------------------------------------------------------------------------------------------------------------------------------------
