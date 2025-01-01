@@ -24,7 +24,7 @@ ENT.MeleeAttackBleedEnemyReps = 4 -- How many reps?
 
 ENT.DisableFootStepSoundTimer = true
 ENT.HasExtraMeleeAttackSounds = true -- Set to true to use the extra melee attack sounds
-ENT.GibOnDeathDamagesTable = {"All"} -- Damages that it gibs from | "UseDefault" = Uses default damage types | "All" = Gib from any damage
+ENT.GibOnDeathFilter = false
 	-- ====== Flinching Code ====== --
 ENT.CanFlinch = 1 -- 0 = Don't flinch | 1 = Flinch at any damage | 2 = Flinch only from certain damages
 ENT.FlinchChance = 1 -- Chance of it flinching from 1 to x | 1 will make it always flinch
@@ -229,7 +229,7 @@ function ENT:OnFlinch(dmginfo, hitgroup, status)
 	end
 end
 ---------------------------------------------------------------------------------------------------------------------------------------------
-function ENT:SetUpGibesOnDeath(dmginfo, hitgroup)
+function ENT:HandleGibOnDeath(dmginfo, hitgroup)
 	if self.Zombie_GibNumber != -1 && hitgroup == HITGROUP_HEAD && (dmginfo:GetDamageForce():Length() > 800 or dmginfo:GetDamage() > 75) then
 		local attachData = self:GetAttachment(self:LookupAttachment("headshot_squirt"))
 		
@@ -250,13 +250,10 @@ function ENT:SetUpGibesOnDeath(dmginfo, hitgroup)
 			self:CreateGibEntity("obj_vj_gib", "models/gibs/humans/sgib_02.mdl", {Pos=attachData.Pos + self:GetUp() * 5 + self:GetRight() * 5})
 			self:CreateGibEntity("obj_vj_gib", "models/gibs/humans/sgib_03.mdl", {Pos=attachData.Pos + self:GetUp() * 5 + self:GetRight() * -5})
 		end
-		return true, {AllowCorpse = true}
+		
+		self:PlaySoundSystem("Gib", sdHeadshot)
+		return true, {AllowCorpse = true, AllowSound = false}
 	end
-end
----------------------------------------------------------------------------------------------------------------------------------------------
-function ENT:CustomGibOnDeathSounds(dmginfo, hitgroup)
-	VJ.EmitSound(self, sdHeadshot, 90, math.random(80, 100))
-	return false
 end
 ---------------------------------------------------------------------------------------------------------------------------------------------
 function ENT:OnCreateDeathCorpse(dmginfo, hitgroup, corpseEnt)
