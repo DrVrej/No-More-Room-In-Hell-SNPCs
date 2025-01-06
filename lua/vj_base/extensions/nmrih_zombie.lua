@@ -245,10 +245,10 @@ function ENT:HandleGibOnDeath(dmginfo, hitgroup)
 		end
 		
 		-- Create the gibs
-		self:CreateGibEntity("obj_vj_gib", "models/gibs/humans/sgib_01.mdl", {Pos=attachData.Pos + self:GetUp() * 5})
+		self:CreateGibEntity("obj_vj_gib", "models/vj_base/gibs/human/gib_small1.mdl", {Pos=attachData.Pos + self:GetUp() * 5})
 		if self.Zombie_Gender != 2 then -- Kids create less gibs
-			self:CreateGibEntity("obj_vj_gib", "models/gibs/humans/sgib_02.mdl", {Pos=attachData.Pos + self:GetUp() * 5 + self:GetRight() * 5})
-			self:CreateGibEntity("obj_vj_gib", "models/gibs/humans/sgib_03.mdl", {Pos=attachData.Pos + self:GetUp() * 5 + self:GetRight() * -5})
+			self:CreateGibEntity("obj_vj_gib", "models/vj_base/gibs/human/gib_small2.mdl", {Pos=attachData.Pos + self:GetUp() * 5 + self:GetRight() * 5})
+			self:CreateGibEntity("obj_vj_gib", "models/vj_base/gibs/human/gib_small3.mdl", {Pos=attachData.Pos + self:GetUp() * 5 + self:GetRight() * -5})
 		end
 		
 		self:PlaySoundSystem("Gib", sdHeadshot)
