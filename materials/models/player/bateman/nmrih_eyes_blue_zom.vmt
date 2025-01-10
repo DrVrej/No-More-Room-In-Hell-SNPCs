@@ -1,7 +1,7 @@
 "VertexLitGeneric"
 {
-	"$basetexture" "models\player\bateman\nmrih_eyes_blue_zom"		
-	"$halflambert" "1"	
+	"$basetexture" "models\player\bateman\nmrih_eyes_blue_zom"
+	"$halflambert" "1"
 	"$model" "1"
 
 	"$phong" "1"
