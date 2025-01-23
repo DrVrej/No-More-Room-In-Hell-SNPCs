@@ -197,12 +197,12 @@ function ENT:OnFlinch(dmginfo, hitgroup, status)
 	if status == "PriorExecution" then
 		-- Shoving system
 		local dmgType = dmginfo:GetDamageType()
-		if dmgType == DMG_CLUB or dmgType == DMG_SLASH  or dmgType == DMG_GENERIC then
+		if dmginfo:GetDamageCustom() == VJ.DMG_FORCE_FLINCH or ((dmgType == DMG_CLUB or dmgType == DMG_SLASH) && dmginfo:GetDamageForce():Length() > 800 && dmginfo:GetDamage() > 10) then
 			local attacker = dmginfo:GetAttacker()
 			if !IsValid(attacker) then
 				attacker = dmginfo:GetInflictor()
 			end
-			if IsValid(attacker) && attacker:IsPlayer() && (dmginfo:GetDamageForce():Length() > 800 && dmginfo:GetDamage() > 10) then
+			if IsValid(attacker) && attacker:IsPlayer() then
 				self.AnimTbl_Flinch = ACT_STEP_FORE
 				if self.Zombie_Gender != 2 then -- Child zombies only have forward animation
 					local playerAim = attacker:GetAimVector()
@@ -220,7 +220,7 @@ function ENT:OnFlinch(dmginfo, hitgroup, status)
 				end
 				return
 			end
-			return true
+			return true -- Disallow flinching
 		end
 		
 		-- Non-melee attacks
