@@ -4,32 +4,27 @@
 	without the prior written consent of the author, unless otherwise indicated for stand-alone materials.
 -----------------------------------------------*/
 ENT.HullType = HULL_HUMAN
-ENT.VJ_NPC_Class = {"CLASS_ZOMBIE"} -- NPCs with the same class with be allied to each other
+ENT.VJ_NPC_Class = {"CLASS_ZOMBIE"}
 ENT.BloodColor = VJ.BLOOD_COLOR_RED
 
-ENT.HasMeleeAttack = true -- Can this NPC melee attack?
+ENT.HasMeleeAttack = true
 ENT.AnimTbl_MeleeAttack = ACT_MELEE_ATTACK1
-ENT.MeleeAttackDistance = 30 -- How close an enemy has to be to trigger a melee attack | false = Let the base auto calculate on initialize based on the NPC's collision bounds
-ENT.MeleeAttackDamageDistance = 75 -- How far does the damage go | false = Let the base auto calculate on initialize based on the NPC's collision bounds
-ENT.TimeUntilMeleeAttackDamage = false -- This counted in seconds | This calculates the time until it hits something
-ENT.SlowPlayerOnMeleeAttack = true -- If true, then the player will slow down
-ENT.SlowPlayerOnMeleeAttack_WalkSpeed = 100 -- Walking Speed when Slow Player is on
-ENT.SlowPlayerOnMeleeAttack_RunSpeed = 100 -- Running Speed when Slow Player is on
-ENT.SlowPlayerOnMeleeAttackTime = 3 -- How much time until player's Speed resets
-ENT.MeleeAttackBleedEnemy = true -- Should the enemy bleed when attacked by melee?
-ENT.MeleeAttackBleedEnemyChance = 2 -- How chance there is that the play will bleed? | 1 = always
-ENT.MeleeAttackBleedEnemyDamage = 1 -- How much damage will the enemy get on every rep?
-ENT.MeleeAttackBleedEnemyTime = 1 -- How much time until the next rep?
-ENT.MeleeAttackBleedEnemyReps = 4 -- How many reps?
+ENT.MeleeAttackDistance = 30
+ENT.MeleeAttackDamageDistance = 75
+ENT.TimeUntilMeleeAttackDamage = false
+ENT.SlowPlayerOnMeleeAttack = true
+ENT.SlowPlayerOnMeleeAttackTime = 3
+ENT.MeleeAttackBleedEnemy = true
+ENT.MeleeAttackBleedEnemyChance = 2
 
 ENT.DisableFootStepSoundTimer = true
-ENT.HasExtraMeleeAttackSounds = true -- Set to true to use the extra melee attack sounds
+ENT.HasExtraMeleeAttackSounds = true
 ENT.GibOnDeathFilter = false
-	-- ====== Flinching Code ====== --
-ENT.CanFlinch = 1 -- 0 = Don't flinch | 1 = Flinch at any damage | 2 = Flinch only from certain damages
-ENT.FlinchChance = 1 -- Chance of it flinching from 1 to x | 1 will make it always flinch
-ENT.NextFlinchTime = false -- How much time until it can flinch again?
-ENT.AnimTbl_Flinch = ACT_STEP_FORE -- The regular flinch animations to play
+
+ENT.CanFlinch = 1
+ENT.FlinchChance = 1
+ENT.NextFlinchTime = false
+ENT.AnimTbl_Flinch = ACT_STEP_FORE
 /* -- Gesture flinching looks very odd due to their animations, disabled for now
 ENT.HitGroupFlinching_Values = {
 	{HitGroup = {HITGROUP_HEAD}, Animation = {"vjges_flinch_head_1", "vjges_flinch_head_2", "vjges_flinch_head_3"}},
@@ -238,7 +233,7 @@ function ENT:HandleGibOnDeath(dmginfo, hitgroup)
 		self:SetBodygroup(self.Zombie_GibNumber.a, self.Zombie_GibNumber.b)
 		
 		-- Main drainage particles are in "OnCreateDeathCorpse"
-		if self.HasGibOnDeathEffects == true then
+		if self.HasGibOnDeathEffects then
 			for _ = 1, 3 do
 				ParticleEffect("blood_impact_red_01", attachData.Pos, attachData.Ang)
 			end
@@ -257,7 +252,7 @@ function ENT:HandleGibOnDeath(dmginfo, hitgroup)
 end
 ---------------------------------------------------------------------------------------------------------------------------------------------
 function ENT:OnCreateDeathCorpse(dmginfo, hitgroup, corpseEnt)
-	if self.GibbedOnDeath && self.HasGibOnDeathEffects == true then
+	if self.GibbedOnDeath && self.HasGibOnDeathEffects then
 		local attach = corpseEnt:LookupAttachment("headshot_squirt")
 		VJ.EmitSound(corpseEnt, sdHeadshotDrain, 60, math.random(80, 100))
 		ParticleEffectAttach("vj_nmrih_blood_drain", PATTACH_POINT_FOLLOW, corpseEnt, attach)
