@@ -155,9 +155,9 @@ function ENT:OnInput(key, activator, caller, data)
 		self.MeleeAttackDamage = 12
 		self:MeleeAttackCode()
 	elseif key == "step" then
-		self:FootStepSoundCode()
+		self:PlayFootstepSound()
 	elseif key == "crawl_step" then
-		self:FootStepSoundCode(sdCrawling)
+		self:PlayFootstepSound(sdCrawling)
 	end
 end
 ---------------------------------------------------------------------------------------------------------------------------------------------
