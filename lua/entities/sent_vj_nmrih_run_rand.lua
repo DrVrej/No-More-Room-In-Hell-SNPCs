@@ -16,7 +16,7 @@ ENT.Category		= "VJ Base Spawners"
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 if !SERVER then return end
 
-ENT.SingleSpawner = true -- If set to true, it will spawn the entities once then remove itself
+ENT.SingleSpawner = true
 ENT.EntitiesToSpawn = {
 	{Entities = {
 		"npc_vj_nmrih_run_male",
