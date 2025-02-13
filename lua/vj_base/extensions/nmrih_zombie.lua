@@ -21,7 +21,7 @@ ENT.DisableFootStepSoundTimer = true
 ENT.HasExtraMeleeAttackSounds = true
 ENT.GibOnDeathFilter = false
 
-ENT.CanFlinch = 1
+ENT.CanFlinch = true
 ENT.FlinchChance = 1
 ENT.NextFlinchTime = false
 ENT.AnimTbl_Flinch = ACT_STEP_FORE
@@ -177,7 +177,7 @@ function ENT:OnDamaged(dmginfo, hitgroup, status)
 			if self.Zombie_LegHP <= 0 then
 				self.AnimTbl_MeleeAttack = ACT_MELEE_ATTACK_SWING
 				self.Zombie_IsCrawling = true
-				self.CanFlinch = 0
+				self.CanFlinch = false
 				self:SetCollisionBounds(Vector(25, 25, 20), -Vector(25, 25, 0))
 				self:SetSurroundingBounds(Vector(60, 60, 30), -Vector(60, 60, 0))
 				local newEyeOffset = self:GetUp() * 15
