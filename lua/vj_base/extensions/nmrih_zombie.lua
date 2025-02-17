@@ -12,8 +12,8 @@ ENT.AnimTbl_MeleeAttack = ACT_MELEE_ATTACK1
 ENT.MeleeAttackDistance = 30
 ENT.MeleeAttackDamageDistance = 75
 ENT.TimeUntilMeleeAttackDamage = false
-ENT.SlowPlayerOnMeleeAttack = true
-ENT.SlowPlayerOnMeleeAttackTime = 3
+ENT.MeleeAttackPlayerSpeed = true
+ENT.MeleeAttackPlayerSpeedTime = 3
 ENT.MeleeAttackBleedEnemy = true
 ENT.MeleeAttackBleedEnemyChance = 2
 
@@ -23,10 +23,10 @@ ENT.GibOnDeathFilter = false
 
 ENT.CanFlinch = true
 ENT.FlinchChance = 1
-ENT.NextFlinchTime = false
+ENT.FlinchCooldown = false
 ENT.AnimTbl_Flinch = ACT_STEP_FORE
 /* -- Gesture flinching looks very odd due to their animations, disabled for now
-ENT.HitGroupFlinching_Values = {
+ENT.FlinchHitGroupMap = {
 	{HitGroup = {HITGROUP_HEAD}, Animation = {"vjges_flinch_head_1", "vjges_flinch_head_2", "vjges_flinch_head_3"}},
 	{HitGroup = {HITGROUP_CHEST}, Animation = {"vjges_flinch_chest_1", "vjges_flinch_chest_2", "vjges_flinch_chest_3"}},
 	{HitGroup = {HITGROUP_LEFTARM}, Animation = {"vjges_flinch_leftarm_1", "vjges_flinch_leftarm_2", "vjges_flinch_leftarm_3"}},
