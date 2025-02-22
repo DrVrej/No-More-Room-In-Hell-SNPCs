@@ -189,7 +189,7 @@ function ENT:OnDamaged(dmginfo, hitgroup, status)
 end
 ---------------------------------------------------------------------------------------------------------------------------------------------
 function ENT:OnFlinch(dmginfo, hitgroup, status)
-	if status == "PriorExecution" then
+	if status == "Init" then
 		-- Shoving system
 		local dmgType = dmginfo:GetDamageType()
 		if dmginfo:GetDamageCustom() == VJ.DMG_FORCE_FLINCH or ((dmgType == DMG_CLUB or dmgType == DMG_SLASH) && dmginfo:GetDamageForce():Length() > 800 && dmginfo:GetDamage() > 10) then
