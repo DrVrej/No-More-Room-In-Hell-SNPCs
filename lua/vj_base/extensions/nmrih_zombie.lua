@@ -251,13 +251,13 @@ function ENT:HandleGibOnDeath(dmginfo, hitgroup)
 	end
 end
 ---------------------------------------------------------------------------------------------------------------------------------------------
-function ENT:OnCreateDeathCorpse(dmginfo, hitgroup, corpseEnt)
+function ENT:OnCreateDeathCorpse(dmginfo, hitgroup, corpse)
 	if self.GibbedOnDeath && self.HasGibOnDeathEffects then
-		local attach = corpseEnt:LookupAttachment("headshot_squirt")
-		VJ.EmitSound(corpseEnt, sdHeadshotDrain, 60, math.random(80, 100))
-		ParticleEffectAttach("vj_nmrih_blood_drain", PATTACH_POINT_FOLLOW, corpseEnt, attach)
-		//ParticleEffectAttach("vj_nmrih_blood_drain_big", PATTACH_POINT_FOLLOW, corpseEnt, attach)
-		ParticleEffectAttach("vj_nmrih_blood_drain_short", PATTACH_POINT_FOLLOW, corpseEnt, attach)
-		ParticleEffectAttach("vj_nmrih_blood_trails", PATTACH_POINT_FOLLOW, corpseEnt, attach)
+		local attach = corpse:LookupAttachment("headshot_squirt")
+		VJ.EmitSound(corpse, sdHeadshotDrain, 60, math.random(80, 100))
+		ParticleEffectAttach("vj_nmrih_blood_drain", PATTACH_POINT_FOLLOW, corpse, attach)
+		//ParticleEffectAttach("vj_nmrih_blood_drain_big", PATTACH_POINT_FOLLOW, corpse, attach)
+		ParticleEffectAttach("vj_nmrih_blood_drain_short", PATTACH_POINT_FOLLOW, corpse, attach)
+		ParticleEffectAttach("vj_nmrih_blood_trails", PATTACH_POINT_FOLLOW, corpse, attach)
 	end
 end
